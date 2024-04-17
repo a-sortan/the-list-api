@@ -1,3 +1,6 @@
+#db password
+change_passwords.sql
+
 # Logs
 logs
 *.log
