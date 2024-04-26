@@ -64,8 +64,8 @@ exports.addList = async function(req, res, next) {
      values: [req.body.col_val]
     }
     let rs = await pool.query(queryText);
-    if(rs.rows[0]) {
-      return res.status(200).json(rs.rows[0]);
+    if(rs.rows[0].p_res) {
+      return res.status(200).json(rs.rows[0].p_res);
     } else {
       client.release();
       const err = {
@@ -95,8 +95,8 @@ exports.updateList = async function(req, res, next) {
      values: [req.params.list_id, colNames, req.body.col_val]
     }
     let rs = await pool.query(queryText);
-    if(rs.rows[0]) {
-      return res.status(200).json(rs.rows[0]);
+    if(rs.rows[0].p_res) {
+      return res.status(200).json(rs.rows[0].p_res);
     } else {
       client.release();
       const err = {
@@ -123,8 +123,8 @@ exports.deleteList = async function(req, res, next) {
      values: [req.params.list_id]
     }
     let rs = await pool.query(queryText);
-    if(rs.rows[0]) {
-      return res.status(200).json(rs.rows[0]);
+    if(rs.rows[0].p_res) {
+      return res.status(200).json(rs.rows[0].p_res);
     } else {
       client.release();
       const err = {
