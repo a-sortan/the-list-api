@@ -12,7 +12,8 @@ create table tls_list (
 );
 
 create unique index tls_list_pk on tls_list(id);
-create unique index tls_list_title_udx on tls_list(lower(title));
+create unique index tls_list_title_udx on tls_list(lower(title), deleted);
+
 
 alter table tls_list
 add primary key
