@@ -1,6 +1,6 @@
 --drop procedure tls_load_get_all_lists;
-create or replace procedure tls_load_get_all_lists (p_res inout jsonb) as $$
---call tls_load_get_all_lists( null);
+create or replace procedure tls_load_get_all_lists (p_res inout jsonb default null) as $$
+--call tls_load_get_all_lists();
 begin
   select json_strip_nulls(json_agg(t)) as jsonb
   into p_res
@@ -17,8 +17,8 @@ $$ language plpgsql;--tls_load_get_all_lists
 
 
 --drop procedure tls_load_get_list_by_id;
-create or replace procedure tls_load_get_list_by_id (p_list_id bigint, p_res inout jsonb) as $$
---call tls_load_get_list_by_id(901, null);
+create or replace procedure tls_load_get_list_by_id (p_list_id bigint, p_res inout jsonb default null) as $$
+--call tls_load_get_list_by_id(901);
 begin
   select row_to_json(t)
   into strict p_res
@@ -51,5 +51,3 @@ begin
 end;
 $$ language plpgsql; --tls_load_list_by_id
 
-
---select tls_load_list_by_id(901);

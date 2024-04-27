@@ -2,10 +2,14 @@ const { pool } = require('../config')
 
 exports.getAllLists = async function(req, res, next) {
   try {
-   //GET api/db/lists
-   //http GET http://localhost:3000/api/db/lists
+    /*
+    ==================
+    GET api/db/lists
+    http GET http://localhost:3000/api/db/lists
+    ==================
+    */
     let queryText = {
-      text: `call tls_load_get_all_lists(null)`,
+      text: `call tls_load_get_all_lists()`,
       values: []
     }
     let rs = await pool.query(queryText);
@@ -29,10 +33,14 @@ exports.getAllLists = async function(req, res, next) {
 
 exports.getListById = async function(req, res, next) {
   try {
-   //GET api/db/lists/:list_id
-   //http GET http://localhost:3000/api/db/lists/901
+    /*
+    ==================
+    GET api/db/lists/:list_id
+    http GET http://localhost:3000/api/db/lists/901
+    ==================
+    */
     let queryText = {
-     text: `call tls_load_get_list_by_id($1, null)`,
+     text: `call tls_load_get_list_by_id($1)`,
      values: [req.params.list_id]
     }
     let rs = await pool.query(queryText);;
@@ -57,10 +65,14 @@ exports.getListById = async function(req, res, next) {
 
 exports.addList = async function(req, res, next) {
   try {
-   //POST api/db/lists
-   //http POST http://localhost:3000/api/db/lists col_val='{"title":"aaa", "color":"pink"}'
+    /*
+    ==================
+    POST api/db/lists
+    http POST http://localhost:3000/api/db/lists col_val='{"title":"aaa", "color":"pink"}'
+    ==================
+    */
     let queryText = {
-     text: `call tls_save_add_list($1, null)`,
+     text: `call tls_save_add_list($1)`,
      values: [req.body.col_val]
     }
     let rs = await pool.query(queryText);
@@ -84,15 +96,17 @@ exports.addList = async function(req, res, next) {
 
 exports.updateList = async function(req, res, next) {
   try {
-   //PUT api/db/lists/:list_id
-   //http PUT http://localhost:3000/api/db/lists/901 col_val='{"title":"the new list", "color":"red"}'
-   let colsObj = JSON.parse(req.body.col_val);
-   console.log(typeof colsObj) 
-   let colNames = Object.keys(colsObj).join(',');
-   console.log(colNames);
+    /*
+    ==================
+    PUT api/db/lists/:list_id
+    http PUT http://localhost:3000/api/db/lists/901 col_val='{"title":"the new list", "color":"red"}'
+    ==================
+    */
+    let colsObj = JSON.parse(req.body.col_val);
+    let colNames = Object.keys(colsObj).join(',');
     let queryText = {
-     text: `call tls_save_update_list($1, $2, $3, null)`,
-     values: [req.params.list_id, colNames, req.body.col_val]
+      text: `call tls_save_update_list($1, $2, $3)`,
+      values: [req.params.list_id, colNames, req.body.col_val]
     }
     let rs = await pool.query(queryText);
     if(rs.rows[0].p_res) {
@@ -116,10 +130,14 @@ exports.updateList = async function(req, res, next) {
 
 exports.deleteList = async function(req, res, next) {
   try {
-   //DELETE api/db/lists/:list_id
-   //http DELETE http://localhost:3000/api/db/lists/901 
+    /*
+    ==================
+    DELETE api/db/lists/:list_id
+    http DELETE http://localhost:3000/api/db/lists/901 
+    ==================
+    */
     let queryText = {
-     text: `call tls_save_delete_list($1, null)`,
+     text: `call tls_save_delete_list($1)`,
      values: [req.params.list_id]
     }
     let rs = await pool.query(queryText);

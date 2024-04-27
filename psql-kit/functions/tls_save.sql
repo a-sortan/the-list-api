@@ -1,6 +1,6 @@
 --drop procedure tls_save_add_list;
-create or replace procedure tls_save_add_list(p_col_val jsonb, p_res out jsonb) as $$
---call tls_save_add_list('{"title":"dddbbb", "color":"grey"}', null)
+create or replace procedure tls_save_add_list(p_col_val jsonb, p_res inout jsonb default null) as $$
+--call tls_save_add_list('{"title":"some random list", "color":"orange"}')
 declare
   l_list_id     bigint;
   l_rec         record;
@@ -25,8 +25,8 @@ $$ language plpgsql;--tls_save_add_list
  
 
 --drop procedure tls_save_update_list;
-create or replace procedure tls_save_update_list(p_list_id bigint, p_col_names varchar, p_col_val jsonb, p_res out jsonb) as $$
---call tls_save_update_list(901, 'title, color', '{"title":"the list", "color":"blue"}'::jsonb, null)
+create or replace procedure tls_save_update_list(p_list_id bigint, p_col_names varchar, p_col_val jsonb, p_res inout jsonb default null) as $$
+--call tls_save_update_list(901, 'title, color', '{"title":"the list", "color":"blue"}'::jsonb)
 declare
   l_sql             text;
   l_date_modified   timestamp;
@@ -57,8 +57,8 @@ $$ language plpgsql;--tls_save_update_list
 
 
 --drop procedure tls_save_delete_list;
-create or replace procedure tls_save_delete_list(p_list_id smallint, p_res out boolean) as $$
---call tls_save_delete_list(1106::smallint);
+create or replace procedure tls_save_delete_list(p_list_id bigint, p_res inout boolean default false) as $$
+--call tls_save_delete_list(901::smallint);
 begin
   p_res:=false;
 --  raise exception using message = concat('tls_save_delete_list_name: ', p_col_val);
