@@ -61,6 +61,7 @@ begin
   from (select id, pid, date_created, date_modified, list_id, title, effort, tags, description, completed, date_completed, due_date
         from tls_task
         where deleted is false
+          and completed is false
       ) t;
     --  raise exception using message = concat('tls_load_get_all_active_tasks: ', p_param_filter);
   EXCEPTION   
@@ -80,6 +81,7 @@ begin
         from tls_task
         where list_id=p_list_id
           and deleted is false
+          and completed is false
       ) t;
     --  raise exception using message = concat('tls_load_get_active_tasks_from_list: ', p_param_filter);
   EXCEPTION   
