@@ -113,3 +113,44 @@ begin
       raise;
 end;
 $$ language plpgsql;--tls_load_get_task_by_id
+
+
+--drop procedure tls_load_get_all_rewards;
+create or replace procedure tls_load_get_all_rewards(p_res inout jsonb default null) as $$
+--call tls_load_get_all_rewards();
+begin
+  select json_strip_nulls(json_agg(t)) as jsonb
+  into p_res
+  from (select id, date_created, date_modified, title, description, effort_lvl, active, list_id
+        from tls_reward
+        where deleted is false
+      ) t;
+    --  raise exception using message = concat('tls_load_get_all_rewards: ', p_param_filter);
+  EXCEPTION   
+    when others then 
+      raise;
+end;
+$$ language plpgsql;--tls_load_get_all_rewards
+
+
+--drop procedure tls_load_get_reward_by_id;
+create or replace procedure tls_load_get_reward_by_id(p_reward_id bigint, p_res inout jsonb default null) as $$
+--call tls_load_get_reward_by_id(2711);
+begin
+  select row_to_json(t)
+  into strict p_res
+  from (select id, date_created, date_modified, title, description, effort_lvl, active, list_id 
+        from tls_reward
+        where id = p_reward_id
+          and deleted is false
+       ) t;
+    --  raise exception using message = concat('tls_load_get_reward_by_id: ', p_param_filter);
+  exception
+    when no_data_found then
+      raise exception 'Reward with id % was not found', p_reward_id;
+    when too_many_rows then
+      raise exception 'Reward with id % is not unique', p_reward_id;
+    when others then 
+      raise;
+end;
+$$ language plpgsql;--tls_load_get_task_by_id
