@@ -1,6 +1,9 @@
 #db password
 change_passwords.sql
 
+#brainstorming
+the-list-api-notes.txt
+
 # Logs
 logs
 *.log
