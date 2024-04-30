@@ -1,4 +1,4 @@
-const { pool } = require('../config')
+const { pool } = require('../config');
 
 exports.getAllLists = async function(req, res, next) {
   try {
@@ -275,7 +275,7 @@ exports.addTask = async function(req, res, next) {
       client.release();
       const err = {
         status: 400,
-        message: 'The list could not be saved'
+        message: 'The task could not be saved'
       }
       return next(err);
     }
