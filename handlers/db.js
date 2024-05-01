@@ -234,7 +234,7 @@ exports.getTaskById = async function(req, res, next) {
      text: `call tls_load_get_task_by_id($1)`,
      values: [req.params.task_id]
     }
-    let rs = await pool.query(queryText);;
+    let rs = await pool.query(queryText);
     if(rs.rows[0].p_res) {
       return res.status(200).json(rs.rows[0].p_res);
     } else {
