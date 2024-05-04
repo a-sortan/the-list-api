@@ -154,3 +154,38 @@ begin
       raise;
 end;
 $$ language plpgsql;--tls_load_get_task_by_id
+
+
+--drop procedure tls_load_get_task_info_for_todoist;
+create or replace procedure tls_load_get_task_info_for_todoist(p_task_id bigint, p_res inout jsonb default null) as $$
+--call tls_load_get_task_info_for_todoist(2311);
+declare
+  l_res     jsonb;
+begin
+  select jsonb_build_object('task',t)
+  into strict p_res
+  from (select id, pid, date_created, date_modified, list_id, title, effort, 
+               tags, description, completed, date_completed, due_date 
+        from tls_task
+        where id = p_task_id
+          and deleted is false
+       ) t;
+--  p_res := coalesce(l_res, '{}');
+  select jsonb_build_object('task_todoist',t)
+  into l_res
+  from (select task_id, todoist_id, date_created, date_modified, deleted
+        from tls_todoist_task
+        where task_id=p_task_id
+       ) t;
+  p_res := p_res || coalesce(l_res, '{}');
+--      raise exception using message = concat('tls_load_get_task_info_for_todoist: ', p_res);
+  exception
+    when no_data_found then
+      raise exception 'Task with id % was not found', p_task_id;
+    when too_many_rows then
+      raise exception 'Task with id % is not unique', p_task_id;
+    when others then 
+      raise;
+end;
+$$ language plpgsql;--tls_load_get_task_by_id
+

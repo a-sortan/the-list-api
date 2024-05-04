@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const {port} = require('./config');
 const errorHandler = require('./handlers/error');
 const dbRoutes = require('./routes/db');
+const todoistRoutes = require('./routes/todoist');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.get('/', function(req, res) {
 });
 
 app.use('/api/db', dbRoutes);
+app.use('/api/todoist', todoistRoutes);
 
 app.use(function(req,res,next) {
 	let err = new Error("Page not found");
