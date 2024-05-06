@@ -159,12 +159,44 @@ exports.deleteList = async function(req, res, next) {
  }
 };
 
-exports.getAllActiveTasks = async function(req, res, next) {
+exports.getAllTasks = async function(req, res, next) {
   try {
     /*
     ==================
     GET api/db/tasks
     http GET http://localhost:3000/api/db/tasks
+    ==================
+    */
+    let queryText = {
+      text: `call tls_load_get_all_tasks()`,
+      values: []
+    }
+    let rs = await pool.query(queryText);
+    if(rs.rows[0].p_res) {
+      return res.status(200).json(rs.rows[0].p_res);
+    } else {
+      client.release();
+      const err = {
+        status: 400,
+        message: 'The was a problem with loading the active tasks'
+      }
+      return next(err);
+    }
+ } catch (err) {
+   return next({
+     status: 400,
+     message: err.message
+   });
+ }
+};
+
+
+exports.getAllActiveTasks = async function(req, res, next) {
+  try {
+    /*
+    ==================
+    GET api/db/tasks
+    http GET http://localhost:3000/api/db/tasks/active
     ==================
     */
     let queryText = {
@@ -190,13 +222,44 @@ exports.getAllActiveTasks = async function(req, res, next) {
  }
 };
 
+exports.getAllTasksFromList = async function(req, res, next) {
+  try {
+    /*
+    ==================
+    GET api/db/lists/:list_id/tasks
+    http GET http://localhost:3000/api/db/lists/901/tasks
+    ==================
+    */
+    let queryText = {
+     text: `call tls_load_get_all_tasks_from_list($1)`,
+     values: [req.params.list_id]
+    }
+    let rs = await pool.query(queryText);;
+    if(rs.rows[0].p_res) {
+      return res.status(200).json(rs.rows[0].p_res);
+    } else {
+      client.release();
+      const err = {
+        status: 400,
+        message: 'The list could not be loaded'
+      }
+      return next(err);
+    }
+ } catch (err) {
+   return next({
+     status: 400,
+     message: err.message
+   });
+ }
+};
+
 
 exports.getActiveTasksFromList = async function(req, res, next) {
   try {
     /*
     ==================
     GET api/db/lists/:list_id/tasks
-    http GET http://localhost:3000/api/db/lists/901/tasks
+    http GET http://localhost:3000/api/db/lists/901/tasks/active
     ==================
     */
     let queryText = {

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router({mergeParams: true});
 const {
       getAllLists, getListById, addList, updateList, deleteList, 
-      getAllActiveTasks, getActiveTasksFromList, getTaskById, addTask, updateTask, deleteTask, 
+      getAllTasks, getAllActiveTasks, getAllTasksFromList, getActiveTasksFromList, getTaskById, addTask, updateTask, deleteTask, 
       getAllRewards, addRewards, getRewardById, updateReward, deleteReward
     } = require('../handlers/db');
 
@@ -15,10 +15,16 @@ router.route('/lists/:list_id')
   .delete(deleteList);
 
 router.route('/lists/:list_id/tasks')
+  .get(getAllTasksFromList);
+
+router.route('/lists/:list_id/tasks/active')
   .get(getActiveTasksFromList);
+
+router.route('/tasks/active')
+  .get(getAllActiveTasks)
   
 router.route('/tasks')
-  .get(getAllActiveTasks)
+  .get(getAllTasks)
   .post(addTask);
 router.route('/tasks/:task_id')
   .get(getTaskById)
