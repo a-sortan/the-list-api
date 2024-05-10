@@ -10,8 +10,11 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+app.use(express.static(__dirname +'/public'));
+app.use(express.static(__dirname + '/views'));
+
 app.get('/', function(req, res) {
-  res.status(200).json({index: "hello world"})
+	res.sendFile("index.html");
 });
 
 app.use('/api/db', dbRoutes);
